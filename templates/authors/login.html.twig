@@ -1,0 +1,25 @@
+{% block body %}
+    <div class="login-container">
+        <h1>Login To Author Account</h1>
+
+        {% if app.session.get('login_error') %}
+            <div class="alert alert-danger">
+                {{ app.session.get('login_error') }}
+            </div>
+        {% endif %}
+        <form action="{{ path('app_authors_login_validation') }}" method="POST">
+            <div class="form-group">
+                <label for="username">UserName: </label>
+                <input type="text" id="username" name="username" required class="form-control" placeholder="Enter Username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required class="form-control" placeholder="Password">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+{% endblock %}
+
