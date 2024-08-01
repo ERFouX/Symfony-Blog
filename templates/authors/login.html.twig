@@ -6,7 +6,9 @@
             <div class="alert alert-danger">
                 {{ app.session.get('login_error') }}
             </div>
+            {% do app.session.remove('login_error') %}
         {% endif %}
+
         <form action="{{ path('app_authors_login_validation') }}" method="POST">
             <div class="form-group">
                 <label for="username">UserName: </label>
@@ -22,4 +24,3 @@
         </form>
     </div>
 {% endblock %}
-

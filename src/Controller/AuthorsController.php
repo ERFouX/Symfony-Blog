@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class AuthorsController extends AbstractController
@@ -26,11 +27,9 @@ class AuthorsController extends AbstractController
     #[Route('/authors/panel', name: 'app_authors_panel', methods: ['GET'])]
     public function panel(): Response
     {
-        if ($this->getUser()) {
-            return $this->render('authors/panel.html.twig', []);
-        }else{
-            return $this->redirectToRoute('app_authors_login', []);
-        }
+
+        return $this->render('authors/panel.html.twig', []);
+
     }
     
     # ---------- REDIRECT TO DEFAULT ROUTES ----------
@@ -42,12 +41,16 @@ class AuthorsController extends AbstractController
 
     # ---------- LOGIN ----------
     #[Route('/authors/login', name: 'app_authors_login')]
-    public function login(): Response
+    public function login(SessionInterface $session): Response
     {
+        if ($this->getUser() || $session->has('user_id')) {
+            return $this->redirectToRoute('app_authors_panel');
+        }
+
         return $this->render('authors/login.html.twig', []);
     }
 
-    #[Route('/authors/login/validation', name:'app_authors_login_validation', methods: ['POST'])]
+    #[Route('/authors/login/validation', name: 'app_authors_login_validation', methods: ['POST'])]
     public function login_validation(Request $request, AuthorsRepository $authorsRepository, SessionInterface $session): Response
     {
         $username = $request->request->get('username');
@@ -55,12 +58,14 @@ class AuthorsController extends AbstractController
         $user = $authorsRepository->findOneBy(['username' => $username]);
 
         if ($user && password_verify($password, $user->getPassword())) {
+            $session->set('user_id', $user->getId());
             return $this->redirectToRoute('app_authors_panel');
         } else {
             $session->set('login_error', 'Wrong username or password');
             return $this->redirectToRoute('app_authors_login');
         }
     }
+
 
 
 
@@ -87,6 +92,6 @@ class AuthorsController extends AbstractController
             return new Response('Error: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return new Response('Author registered successfully!');
+        return $this->redirectToRoute('app_authors_panel');
     }
 }
