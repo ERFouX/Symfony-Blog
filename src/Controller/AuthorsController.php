@@ -14,6 +14,13 @@ use Symfony\Component\Routing\Attribute\Route;
 class AuthorsController extends AbstractController
 {
     # ---------- DEFAULTS ----------
+
+    #[Route('/' ,name:'home')]
+    public function home( ): Response
+    {
+        return $this->render('home.html.twig');
+    }
+
     #[Route('/authors', name: 'app_authors')]
     public function index(): Response
     {
@@ -48,24 +55,40 @@ class AuthorsController extends AbstractController
         }
     }
     #[Route('/authors/register/validation', name: 'app_authors_register_validation', methods: ['POST'])]
-    public function register_validation(Request $request, EntityManagerInterface $entityManager): Response
+    public function register_validation(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
-        # Create New Author
+        $username = $request->request->get('username');
+        $password = $request->request->get('password');
+        $profileImage = $request->request->get('profile_image');
+        $email = $request->request->get('email');
+        $bio = $request->request->get('bio');
+
+        if (empty($username) || empty($password) || empty($email) || empty($bio) || empty($profileImage)) {
+            $session->set('register_error', 'All fields are required and must be valid.');
+            return $this->redirectToRoute('app_authors_register');
+        }
+
         $author = new Authors();
-        $author->setUsername($request->request->get('username'));
-        $author->setPassword(password_hash($request->request->get('password'), PASSWORD_DEFAULT));
-        $author->setProfileImage($request->request->get('profile_image'));
-        $author->setEmail($request->request->get('email'));
+        $author->setUsername($username);
+        $author->setPassword(password_hash($password, PASSWORD_DEFAULT));
+        $author->setProfileImage($profileImage);
+        $author->setEmail($email);
+        $author->setBio($bio);
 
         try {
             $entityManager->persist($author);
             $entityManager->flush();
-        } catch (\Exception $e) {
-            return new Response('Error: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (\Exception) {
+            $session->set('register_error', 'Check Your Inputs');
+            return $this->redirectToRoute('app_authors_register');
         }
 
+        $session->set('user_id', $author->getId());
+        $session->set('username',$author->getUsername());
+        $session->set('register_message', 'Your information has been successfully registered');
         return $this->redirectToRoute('app_authors_panel');
     }
+
 
     # ---------- LOGIN ----------
     #[Route('/authors/login', name: 'app_authors_login')]
@@ -86,6 +109,8 @@ class AuthorsController extends AbstractController
 
         if ($user && password_verify($password, $user->getPassword())) {
             $session->set('user_id', $user->getId());
+            $session->set('username',$user->getUsername());
+            $session->set('login_message','Welcome '.$user->getUsername());
             return $this->redirectToRoute('app_authors_panel');
         } else {
             $session->set('login_error', 'Wrong username or password');
