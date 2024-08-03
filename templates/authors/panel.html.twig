@@ -2,7 +2,15 @@
     <title>Panel Page</title>
 {% endblock %}
 {% block body %}
-    <h2>Panel Page</h2>
+    {% if app.session.get('user_id') %}
+        <div class="alert alert-danger">
+            Hello! Your id is :{{ app.session.get('user_id') }}
+        </div>
+        <div>
+            <a href="{{ path('app_authors_logout') }}">LogOut!</a>
+        </div>
+
+    {% endif %}
 {% endblock %}
 
 

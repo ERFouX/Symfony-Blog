@@ -3,12 +3,16 @@
 {% endblock %}
 
 {% block body %}
+    <h1>AUTHORS PAGE :</h1>
+    {% if app.session.get('user_id') %}
+        <div class="alert alert-danger">
+            Hello! Your id is :{{ app.session.get('user_id') }}
+        </div>
+
+    {% endif %}
+
     <h1>authors page</h1>
 <div>
-    <h3>Hello {{ controller_name }}!</h3>
-{#    <ul>#}
-{#        <li>{{Authors.profile_image}}</li>#}
-{#        <li>{{Authors.userName}}</li>#}
-{#    </ul>#}
+
 </div>
 {% endblock %}
