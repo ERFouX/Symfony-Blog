@@ -23,6 +23,7 @@ class PostsController extends AbstractController
         ]);
     }
 
+    # ---------- SHOW POST ----------
     #[Route('/post/show/{id}', name: 'app_posts_show')]
     public function show(Posts $post): Response
     {
@@ -69,32 +70,46 @@ class PostsController extends AbstractController
         $entityManager->persist($post);
         $entityManager->flush();
         $session->set('create_post_message', 'Your post has been created successfully');
-        return $this->redirectToRoute('app_posts');
+        return $this->redirectToRoute('app_authors_panel');
     }
 
     # ---------- DELETE POST ----------
     #[Route('/posts/delete/{id}', name: 'app_posts_delete')]
     public function delete(Posts $post, SessionInterface $session, EntityManagerInterface $entityManager): Response
     {
-        $currentUserId = $session->get('user_id');
-
-        if ($post->getAuthor() === $currentUserId) {
+        if ($post->getAuthor() == $session->get('user_id')) {
             $entityManager->remove($post);
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_posts_index');
+            $session->set('delete_post_message', 'Your post has been deleted successfully');
+            return $this->redirectToRoute('app_authors_panel');
         }
-         $session->set('delete_post_permission_error','You are not authorized to delete this post');
+        $session->set('delete_post_permission_error','You are not authorized to delete this post');
         return $this->redirectToRoute('app_authors_panel');
     }
 
     # ---------- EDIT POST ----------
     #[Route('posts/edit/{id}', name: 'app_posts_edit')]
-    public function edit(Posts $post, SessionInterface $session): Response
+    public function edit($id, Request $request, EntityManagerInterface $entityManager, SessionInterface $session, PostsRepository $postsRepository): Response
     {
+        $userId = $session->get('user_id');
 
+        $post = $postsRepository->findOneBy(['author' => $userId, 'id' => $id]);
+
+        if ($post) {
+            return $this->render('posts/edit.html.twig', [
+                'post' => $post,
+            ]);
+        } else {
+            $session->set('edit_post_error', 'Post Not Found');
+            return $this->redirectToRoute('app_authors_panel');
+        }
     }
 
 
+    #[Route('/posts/edit/submit', name: 'app_posts_edit_submit', methods: ['POST'])]
+    public function editSubmit(): Response
+    {
+
+    }
 
 }
