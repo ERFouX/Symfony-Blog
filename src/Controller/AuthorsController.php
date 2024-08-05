@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Authors;
 use App\Repository\AuthorsRepository;
+use App\Repository\PostsRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +16,6 @@ use Symfony\Component\Routing\Attribute\Route;
 class AuthorsController extends AbstractController
 {
     # ---------- DEFAULTS ----------
-
     #[Route('/' ,name:'home')]
     public function home( ): Response
     {
@@ -22,17 +23,24 @@ class AuthorsController extends AbstractController
     }
 
     #[Route('/authors', name: 'app_authors')]
-    public function index(): Response
+    public function index(AuthorsRepository $authorsRepository): Response
     {
-        return $this->render('authors/index.html.twig');
+        $authors = $authorsRepository->findAll();
+
+        return $this->render('authors/index.html.twig', [
+            'authors' => $authors,
+        ]);
     }
 
     #[Route('/authors/panel', name: 'app_authors_panel', methods: ['GET'])]
-    public function panel(SessionInterface $session): Response
+    public function panel(SessionInterface $session,PostsRepository $postsRepository): Response
     {
         if ($this->getUser() || $session->has('user_id')) {
-            return $this->render('authors/panel.html.twig');
-        } else {
+
+            $posts = $postsRepository->findBy(['author' => $session->get('user_id')]);
+            return $this->render('authors/panel.html.twig', ['posts' => $posts]);
+        }
+        else {
             return $this->redirectToRoute('app_authors_login');
         }
     }
@@ -125,10 +133,9 @@ class AuthorsController extends AbstractController
         if ($this->getUser() || $session->has('user_id')) {
             $session->clear();
         }
+        $session->set('logout_message', 'You have been logged out');
         return $this->redirectToRoute('app_authors_login');
     }
-
-
 
 
 }
