@@ -6,6 +6,9 @@ $ git clone https://github.com/ERFouX/Symfony-Blog.git
 ```
 #### Install dependencies
 ```
+$ cd Symfony-Blog
+```
+```
 $ composer install
 ```
 #### Running Project
@@ -13,7 +16,6 @@ $ composer install
 start your apache server or anything
 start mysql server
 ```
-$ cd Symfony-Blog
 $ Symfony start:server
 ```
 ### Migrations
