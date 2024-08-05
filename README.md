@@ -4,10 +4,11 @@
 ```
 $ git clone https://github.com/ERFouX/Symfony-Blog.git
 ```
-#### Install dependencies
+Go to the project directory
 ```
 $ cd Symfony-Blog
 ```
+#### Install dependencies
 ```
 $ composer install
 ```
