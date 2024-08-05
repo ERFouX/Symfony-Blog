@@ -7,14 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-
-{% if app.session.get('create_post_message') %}
-    <div class="alert alert-success container mt-5">
-        {{ app.session.get('create_post_message') }}
-    </div>
-    {% do app.session.remove('create_post_message') %}
-{% endif %}
-
 <div class="mt-5 container">
     <header id="FouXBlog">
         <div class="mt-5 container">

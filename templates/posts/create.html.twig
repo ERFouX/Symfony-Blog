@@ -15,7 +15,7 @@
     {% do app.session.remove('create_post_error') %}
 {% endif %}
 <div class="container mt-3">
-    <h2>Create Post</h2>
+    <h2 class="mt-5 alert alert-primary" >Create Post</h2>
     <form action="{{ path('app_posts_create_submit') }}" method="POST">
         <div class="mb-3 mt-3">
             <label for="title">Title:</label>
