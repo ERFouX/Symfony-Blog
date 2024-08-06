@@ -17,19 +17,20 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_authors') }}">Authors</a>
+                        <a class="nav-link" href="/authors">Authors</a>
                     </li>
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <form action="{{ path('app_posts_search') }}" method="GET" class="d-flex">
+                    <input name="keyword" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" required>
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
         </div>
     </nav>
+
     <!-- Post List -->
     <div class="row">
         {% for post in posts %}
@@ -45,6 +46,9 @@
         {% else %}
             <div class="col-12">
                 <h4 class="text-secondary mt-5 text-center">No Posts Found</h4>
+            </div>
+            <div class="mt-2 d-flex justify-content-center">
+                <a class="btn btn-outline-secondary" href="/posts">Show All Posts</a>
             </div>
         {% endfor %}
     </div>
