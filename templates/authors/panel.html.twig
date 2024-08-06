@@ -13,30 +13,43 @@
     </div>
     {% do app.session.remove('delete_post_permission_error') %}
 
-{% elseif app.session.get('delete_post_message') %}
-    <div class="alert alert-warning container mt-5">
-        {{ app.session.get('delete_post_message') }}
-    </div>
-    {% do app.session.remove('delete_post_message') %}
+    {% elseif app.session.get('delete_post_message') %}
+        <div class="alert alert-warning container mt-5">
+            {{ app.session.get('delete_post_message') }}
+        </div>
+        {% do app.session.remove('delete_post_message') %}
 
-{% elseif app.session.get('create_post_message') %}
-    <div class="alert alert-success container mt-5">
-        {{ app.session.get('create_post_message') }}
-    </div>
-    {% do app.session.remove('create_post_message') %}
+    {% elseif app.session.get('create_post_message') %}
+        <div class="alert alert-success container mt-5">
+            {{ app.session.get('create_post_message') }}
+        </div>
+        {% do app.session.remove('create_post_message') %}
+
+    {% elseif app.session.get('edit_post_error') %}
+        <div class="alert alert-danger container mt-5">
+            {{ app.session.get('edit_post_error') }}
+        </div>
+        {% do app.session.remove('edit_post_error') %}
+
+    {% elseif app.session.get('register_message')%}
+        <div class="alert alert-success container mt-5">
+            {{ app.session.get('register_message') }}
+        </div>
+        {% do app.session.remove('register_message') %}
+
 {% endif %}
-{% if app.session.get('edit_post_error') %}
-    <div class="alert alert-danger container mt-5">
-        {{ app.session.get('edit_post_error') }}
-    </div>
-    {% do app.session.remove('edit_post_error') %}
-{% endif %}
-<div class="mt-3">
-    <header id="FouXBlog">
-        <div class="mt-5">
-            <h1 class="alert alert-info"><b>Authors Panel {{ app.session.get('username') }}</b></h1>
-            <a class="btn btn-danger" href="{{ path('app_authors_logout') }}">Logout</a>
-            <a class="btn btn-warning" href="{{ path('app_posts_create') }}">Create Post</a>
+<div class="mt-5">
+    <header>
+        <div class="d-flex">
+            <div class="vw-100">
+                <h1 class="alert alert-primary">
+                    <b>Authors Panel {{ app.session.get('username') }}</b>
+                </h1>
+            </div>
+            <div class="m-2 mt-0">
+                <a class="btn btn-outline-danger" href="{{ path('app_authors_logout') }}">Logout</a>
+                <a class="btn btn-outline-warning mt-1" href="{{ path('app_posts_create') }}">Create Post</a>
+            </div>
         </div>
     </header>
 
