@@ -8,12 +8,28 @@
 </head>
 <body>
 <div class="mt-5 container">
-    <header id="FouXBlog">
-        <div class="mt-5 container">
-            <h1><b>FouX Blog</b></h1>
+    <nav class="border navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">FouX Blog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_authors') }}">Authors</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
         </div>
-    </header>
-
+    </nav>
     <!-- Post List -->
     <div class="row">
         {% for post in posts %}
@@ -28,7 +44,7 @@
             </div>
         {% else %}
             <div class="col-12">
-                <p>No posts found</p>
+                <h4 class="text-secondary mt-5 text-center">No Posts Found</h4>
             </div>
         {% endfor %}
     </div>
