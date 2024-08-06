@@ -120,7 +120,7 @@ class PostsController extends AbstractController
         $resource = $request->request->get('resource');
         $category = $request->request->get('category');
         $tag = $request->request->get('tag');
-
+        # Fields to be filled automatically
         $author = $session->get('user_id');
         $date = date("Y-m-d");
 
@@ -148,8 +148,22 @@ class PostsController extends AbstractController
         $entityManager->persist($post);
         $entityManager->flush();
 
-        $session->set('create_post_message', 'Your post has been edited successfully!');
+        $session->set('edit_post_message', 'Your post has been edited successfully!');
         return $this->redirectToRoute('app_authors_panel');
     }
+
+    # ---------- SEARCH POST ----------
+    #[Route('posts/search', name: 'app_posts_search', methods: ['GET'])]
+    public function search(Request $request, PostsRepository $postsRepository): Response
+    {
+        $keyword = $request->query->get('keyword');
+        $posts = $postsRepository->findBy(['title' => $keyword]);
+
+        return $this->render('posts/index.html.twig', [
+            'posts' => $posts,
+        ]);
+    }
+
+
 
 }
