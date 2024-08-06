@@ -121,11 +121,9 @@ class PostsController extends AbstractController
         $category = $request->request->get('category');
         $tag = $request->request->get('tag');
 
-        // Fields to be filled automatically
         $author = $session->get('user_id');
         $date = date("Y-m-d");
 
-        // Check if any field is empty
         if (empty($title) || empty($banner) || empty($description) || empty($author) || empty($date) || empty($category) || empty($tag)) {
             $session->set('create_post_error', 'All fields are required and must be valid.');
             return $this->redirectToRoute('app_posts_edit', ['id' => $id]);
@@ -138,7 +136,6 @@ class PostsController extends AbstractController
             return $this->redirectToRoute('app_posts_list');
         }
 
-        // Update post with new data
         $post->setTitle($title);
         $post->setBanner($banner);
         $post->setDescription($description);
