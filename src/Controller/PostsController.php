@@ -13,6 +13,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PostsController extends AbstractController
 {
+    # ---------- DEFAULTS ----------
+    #[Route('/' ,name:'home')]
+    public function home( ): Response
+    {
+        return $this->redirectToRoute('app_posts');
+    }
     #[Route('/posts', name: 'app_posts')]
     public function index(PostsRepository $postsRepository): Response
     {
@@ -104,7 +110,6 @@ class PostsController extends AbstractController
             return $this->redirectToRoute('app_authors_panel');
         }
     }
-
 
     #[Route('/posts/edit/submit', name: 'app_posts_edit_submit', methods: ['POST'])]
     public function editSubmit(): Response
