@@ -31,6 +31,12 @@
         </div>
         {% do app.session.remove('edit_post_error') %}
 
+    {% elseif app.session.get('edit_post_message')%}
+        <div class="alert alert-primary container mt-5">
+            {{ app.session.get('edit_post_message') }}
+        </div>
+        {% do app.session.remove('edit_post_message') %}
+
     {% elseif app.session.get('register_message')%}
         <div class="alert alert-success container mt-5">
             {{ app.session.get('register_message') }}
