@@ -111,10 +111,48 @@ class PostsController extends AbstractController
         }
     }
 
-    #[Route('/posts/edit/submit', name: 'app_posts_edit_submit', methods: ['POST'])]
-    public function editSubmit(): Response
+    #[Route('/posts/edit/{id}/submit', name: 'app_posts_edit_submit', methods: ['POST'])]
+    public function editSubmit(Request $request, EntityManagerInterface $entityManager, SessionInterface $session, PostsRepository $postsRepository, $id): Response
     {
+        $title = $request->request->get('title');
+        $banner = $request->request->get('banner');
+        $description = $request->request->get('description');
+        $resource = $request->request->get('resource');
+        $category = $request->request->get('category');
+        $tag = $request->request->get('tag');
 
+        // Fields to be filled automatically
+        $author = $session->get('user_id');
+        $date = date("Y-m-d");
+
+        // Check if any field is empty
+        if (empty($title) || empty($banner) || empty($description) || empty($author) || empty($date) || empty($category) || empty($tag)) {
+            $session->set('create_post_error', 'All fields are required and must be valid.');
+            return $this->redirectToRoute('app_posts_edit', ['id' => $id]);
+        }
+
+        $post = $postsRepository->find($id);
+
+        if (!$post) {
+            $session->set('create_post_error', 'Post not found.');
+            return $this->redirectToRoute('app_posts_list');
+        }
+
+        // Update post with new data
+        $post->setTitle($title);
+        $post->setBanner($banner);
+        $post->setDescription($description);
+        $post->setResource($resource);
+        $post->setAuthor($author);
+        $post->setDate($date);
+        $post->setCategory($category);
+        $post->setTag($tag);
+
+        $entityManager->persist($post);
+        $entityManager->flush();
+
+        $session->set('create_post_message', 'Your post has been edited successfully!');
+        return $this->redirectToRoute('app_authors_panel');
     }
 
 }
