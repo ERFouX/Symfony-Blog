@@ -8,12 +8,34 @@
 </head>
 <body>
 <div class="mt-5 container">
-    <header>
-        <div class="d-flex">
-            <div class="vw-100"><h1 class="alert alert-info"><b>Authors List</b></h1></div>
-            <div class="m-2 mt-0"><a class="btn btn-outline-danger" href="{{ path('app_authors_login') }}">Login</a> <a class="btn btn-outline-warning mt-1" href="{{ path('app_authors_register') }}">Register</a></div>
+    <nav class="border navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Authors</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ path('app_authors') }}">Authors</a>
+                    </li>
+                </ul>
+                {%  if app.session.get('user_id') %}
+                    <div>
+                        <a class="btn btn-outline-success" href="{{ path('app_authors_panel') }}">Dashboard</a>
+                    </div>
+                {% else %}
+                    <div>
+                        <a class="mr-3 btn btn-outline-danger" href="{{ path('app_authors_login') }}">login</a>
+                        <a class="btn btn-outline-warning" href="{{ path('app_authors_register') }}">Register</a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
-    </header>
+    </nav>
 
     <!-- Post List -->
     <div class="row">
