@@ -6,7 +6,6 @@ use App\Entity\Authors;
 use App\Repository\AuthorsRepository;
 use App\Repository\PostsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,12 +15,6 @@ use Symfony\Component\Routing\Attribute\Route;
 class AuthorsController extends AbstractController
 {
     # ---------- DEFAULTS ----------
-    #[Route('/' ,name:'home')]
-    public function home( ): Response
-    {
-        return $this->render('home.html.twig');
-    }
-
     #[Route('/authors', name: 'app_authors')]
     public function index(AuthorsRepository $authorsRepository): Response
     {
@@ -136,6 +129,5 @@ class AuthorsController extends AbstractController
         $session->set('logout_message', 'You have been logged out');
         return $this->redirectToRoute('app_authors_login');
     }
-
-
+    
 }
