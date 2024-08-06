@@ -1,6 +1,6 @@
 ## Getting Started
 
-#### Clone the project
+#### Clone The Project
 ```
 $ git clone https://github.com/ERFouX/Symfony-Blog.git
 ```
@@ -8,7 +8,7 @@ Go to the project directory
 ```
 $ cd Symfony-Blog
 ```
-#### Install dependencies
+#### Install Dependencies
 ```
 $ composer install
 ```
