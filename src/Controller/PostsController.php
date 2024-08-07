@@ -31,9 +31,18 @@ class PostsController extends AbstractController
 
     # ---------- SHOW POST ----------
     #[Route('/post/show/{id}', name: 'app_posts_show')]
-    public function show(Posts $post): Response
+    public function show($id, Posts $post, PostsRepository $postsRepository, SessionInterface $session): Response
     {
-        return $this->render('posts/show.html.twig', []);
+        $post = $postsRepository->findOneBy(['id' => $id]);
+
+        if ($post) {
+            return $this->render('posts/show.html.twig', [
+                'post' => $post,
+            ]);
+        } else {
+            $session->set('show_post_error', 'Post Not Found');
+            return $this->redirectToRoute('app_posts');
+        }
     }
 
     # ---------- CREATE POST ----------
