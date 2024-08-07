@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PostsRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PostsRepository::class)]
@@ -19,13 +20,13 @@ class Posts
     #[ORM\Column(length: 255)]
     private ?string $banner = null;
 
-    #[ORM\Column(length: 1024)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $resource = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 128)]
     private ?string $author = null;
 
     #[ORM\Column(length: 255)]
@@ -34,7 +35,7 @@ class Posts
     #[ORM\Column(length: 255)]
     private ?string $category = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $tag = null;
 
     public function getId(): ?int
@@ -131,7 +132,7 @@ class Posts
         return $this->tag;
     }
 
-    public function setTag(?string $tag): static
+    public function setTag(string $tag): static
     {
         $this->tag = $tag;
 
