@@ -14,35 +14,37 @@
     </div>
     {% do app.session.remove('create_post_error') %}
 {% endif %}
+
 <div class="container mt-3">
     <h2 class="mt-5 alert alert-warning">Edit Post {{ post.id }}</h2>
     <form action="{{ path('app_posts_edit_submit', {'id': post.id}) }}" method="POST">
         <div class="mb-3 mt-3">
             <label for="title">Title:</label>
-            <input value="{{ post.title }}" type="text" class="form-control" id="title" placeholder="Enter title" name="title">
+            <input value="{{ form_data.title ?? post.title }}" type="text" class="form-control" id="title" placeholder="Enter title" name="title">
         </div>
         <div class="mb-3">
             <label for="banner">Banner:</label>
-            <input type="file" class="form-control" id="banner" placeholder="Upload Your Post Banner" name="banner">
+            <input type="text" value="{{ form_data.banner ?? post.banner }}" class="form-control" id="banner" placeholder="Upload Your Post Banner" name="banner">
         </div>
         <div class="mb-3">
             <label for="description">Description:</label>
-            <input value="{{ post.description }}" type="text" class="form-control" id="description" placeholder="Enter Your Post Content" name="description">
+            <textarea type="text" class="form-control" id="description" placeholder="Enter Your Post Content" name="description">{{ form_data.description ?? post.description }}</textarea>
         </div>
         <div class="mb-3">
             <label for="resource">Resource:</label>
-            <input value="{{ post.resource }}" type="text" class="form-control" id="resource" placeholder="Enter Your Resource" name="resource">
+            <input value="{{ form.data.resource ?? post.resource }}" type="text" class="form-control" id="resource" placeholder="Enter Your Resource" name="resource">
         </div>
         <div class="mb-3">
             <label for="category">Category:</label>
-            <input value="{{ post.category }}" type="text" class="form-control" id="category" placeholder="Enter Category Name" name="category">
+            <input value="{{ form.data.category ?? post.category }}" type="text" class="form-control" id="category" placeholder="Enter Category Name" name="category">
         </div>
         <div class="mb-3">
             <label for="tag">Tags:</label>
-            <input value="{{ post.tag }}" type="text" class="form-control" id="tag" placeholder="Enter a Tag For Your Post" name="tag">
+            <input value="{{ form.data.tag ?? post.tag }}" type="text" class="form-control" id="tag" placeholder="Enter a Tag For Your Post" name="tag">
         </div>
 
         <button type="submit" class="btn btn-warning">Confirm</button>
+        <a class="btn btn-outline-primary" href="/authors/panel">Back To Posts</a>
     </form>
 </div>
 
