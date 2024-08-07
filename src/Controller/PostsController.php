@@ -157,12 +157,19 @@ class PostsController extends AbstractController
     public function search(Request $request, PostsRepository $postsRepository): Response
     {
         $keyword = $request->query->get('keyword');
-        $posts = $postsRepository->findBy(['title' => $keyword]);
+
+        $posts = $postsRepository->createQueryBuilder('p')
+            ->where('p.title LIKE :keyword')
+            ->orWhere('p.description LIKE :keyword')
+            ->setParameter('keyword', '%' . $keyword . '%')
+            ->getQuery()
+            ->getResult();
 
         return $this->render('posts/index.html.twig', [
             'posts' => $posts,
         ]);
     }
+
 
 
 
