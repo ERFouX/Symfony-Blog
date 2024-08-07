@@ -103,21 +103,26 @@ class PostsController extends AbstractController
     }
 
     # ---------- EDIT POST ----------
-    #[Route('posts/edit/{id}', name: 'app_posts_edit')]
+    #[Route('posts/edit/{id}', name: 'app_posts_edit', methods: ['GET'])]
     public function edit($id, Request $request, EntityManagerInterface $entityManager, SessionInterface $session, PostsRepository $postsRepository): Response
     {
         $userId = $session->get('user_id');
 
         $post = $postsRepository->findOneBy(['author' => $userId, 'id' => $id]);
 
+        $formData = $session->get('form_data', []);
+        $session->remove('form_data');
+
         if ($post) {
             return $this->render('posts/edit.html.twig', [
                 'post' => $post,
+                'form_data' => $formData,
             ]);
         } else {
             $session->set('edit_post_error', 'Post Not Found');
             return $this->redirectToRoute('app_authors_panel');
         }
+
     }
 
     #[Route('/posts/edit/{id}/submit', name: 'app_posts_edit_submit', methods: ['POST'])]
@@ -129,13 +134,24 @@ class PostsController extends AbstractController
         $resource = $request->request->get('resource');
         $category = $request->request->get('category');
         $tag = $request->request->get('tag');
-        # Fields to be filled automatically
         $author = $session->get('user_id');
         $date = date("Y-m-d");
 
-        if (empty($title) || empty($banner) || empty($description) || empty($author) || empty($date) || empty($category) || empty($tag)) {
-            $session->set('create_post_error', 'All fields are required and must be valid.');
-            return $this->redirectToRoute('app_posts_edit', ['id' => $id]);
+        $formData = [
+            'title' => $title,
+            'banner' => $banner,
+            'description' => $description,
+            'resource' => $resource,
+            'category' => $category,
+            'tag' => $tag,
+        ];
+
+        foreach ($formData as $key => $value) {
+            if (empty($value)) {
+                $session->set('create_post_error', 'All fields are required and must be valid.');
+                $session->set('form_data', $formData);
+                return $this->redirectToRoute('app_posts_edit', ['id' => $id]);
+            }
         }
 
         $post = $postsRepository->find($id);
@@ -158,8 +174,10 @@ class PostsController extends AbstractController
         $entityManager->flush();
 
         $session->set('edit_post_message', 'Your post has been edited successfully!');
+        $session->remove('form_data');
         return $this->redirectToRoute('app_authors_panel');
     }
+
 
     # ---------- SEARCH POST ----------
     #[Route('posts/search', name: 'app_posts_search', methods: ['GET'])]
@@ -178,8 +196,5 @@ class PostsController extends AbstractController
             'posts' => $posts,
         ]);
     }
-
-
-
 
 }
