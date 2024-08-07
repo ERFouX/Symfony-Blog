@@ -10,7 +10,7 @@
 <div class="mt-5 container">
     <nav class="border navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">FouX Blog</a>
+            <a class="navbar-brand" href="/"><b>FouX Blog</b></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -39,7 +39,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
                         <p class="card-text">{{ post.description|slice(0, 100) ~ '...' }}</p>
-                        <a href="{{ path('app_posts_show', { 'id': post.id }) }}" class="btn btn-sm btn-outline-secondary">Read More..</a>
+                        <a href="{{ path('app_posts_show', { 'id': post.id }) }}" class="gap-1 icon-link-hover stretched-link text-secondary">Continue Reading</a>
                     </div>
                 </div>
             </div>
